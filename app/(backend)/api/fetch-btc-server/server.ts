@@ -25,10 +25,15 @@ export default async function fetchBtcServer({ route, method, body }: FetchBtcSe
     })
 
     try {
+
+        console.log('server route', serverRoute);
+        console.log('method', method);
+        console.log('body', body);
+
         const response = await fetch(serverRoute, { method, headers, body });
 
         if (!response.ok) {
-            console.error(` RPC ${method}`, serverRoute, response.statusText);
+            console.error(` RPC ${method}`, serverRoute, 'error', response.statusText);
             return { error: response.statusText, data: null };
         }
 
@@ -40,7 +45,7 @@ export default async function fetchBtcServer({ route, method, body }: FetchBtcSe
         return { data: stringData, error: null };
 
     } catch (error) {
-        console.error(` RPC ${method}`, serverRoute, error);
+        console.error(` RPC ${method}`, serverRoute, 'throws', error);
         return { error: 'Thrown error: ' + (error as Error).message, data: null };
     }
 }
