@@ -1,4 +1,4 @@
-import getAllowedMethods from "@/app/(backend)/api/allowed-methods/server";
+import getAllowedMethods from "@/app/api/allowed-methods/server";
 import { DataList, Badge } from "@radix-ui/themes";
 
 export default async function AllowedMethods() {

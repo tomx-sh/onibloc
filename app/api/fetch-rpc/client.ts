@@ -12,9 +12,9 @@ export default async function fetchRpc(
         body: JSON.stringify({ method, params }),
     })
 
-    const data = await res.json();
+    const {data, error} = await res.json() as FetchRpcResponse;
 
-    if (!res.ok) return { error: data.error || res.statusText, data: null };
+    if (!res.ok) return { error: error || res.statusText, data: null };
 
-    return {data: JSON.stringify(data), error: null};
+    return { data: data, error: error };
 }

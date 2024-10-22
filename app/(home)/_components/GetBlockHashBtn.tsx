@@ -1,7 +1,8 @@
 'use client'
 import { Button, Flex } from "@radix-ui/themes";
-import fetchRpc from "@/app/(backend)/api/fetch-rpc/client";
+import fetchRpc from "@/app/api/fetch-rpc/client";
 import { useState } from "react";
+
 
 export default function GetBlockHashBtn() {
     const [isLoading, setIsLoading] = useState(false);
