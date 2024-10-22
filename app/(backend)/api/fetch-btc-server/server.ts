@@ -25,33 +25,30 @@ export default async function fetchBtcServer({ route, method, body }: FetchBtcSe
     })
 
     try {
-
-        console.log('server route', serverRoute);
-        console.log('method', method);
-        console.log('body', body);
-
         const response = await fetch(serverRoute, { method, headers, body });
+        const data = await response.json();
 
         if (!response.ok) {
-            console.error(` RPC ${method}`, serverRoute, 'error', response.statusText);
-            return { error: response.statusText, data: null };
+            const errorMess = data.error || response.statusText;
+            console.error(` BTC ${method}`, serverRoute, 'error', errorMess);
+            return { error: errorMess, data: null };
         }
 
-        const data = await response.json();
-        console.log(` RPC ${method}`, serverRoute, formattedKeys(data));
+        
+        console.log(` BTC ${method}`, serverRoute)//, formattedKeys(data));
 
         const stringData = JSON.stringify(data);
 
         return { data: stringData, error: null };
 
     } catch (error) {
-        console.error(` RPC ${method}`, serverRoute, 'throws', error);
+        console.error(` BTC ${method}`, serverRoute, 'throws', error);
         return { error: 'Thrown error: ' + (error as Error).message, data: null };
     }
 }
 
 
 /** Show the keys of an object like: { key1, key2, key3 } */
-function formattedKeys(object): string {
+/*function formattedKeys(object): string {
     return `{ ${Object.keys(object).join(", ")} }`;
-}
+}*/

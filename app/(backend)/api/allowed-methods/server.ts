@@ -3,7 +3,7 @@ import fetchBtcServer from "../fetch-btc-server/server";
 
 interface GetAllowedMethodsResponse {
     data: Record<string, boolean> | null;
-    error: string   | null;
+    error: string | null;
 }
 
 
