@@ -26,15 +26,15 @@ export default async function fetchBtcServer({ route, method, body }: FetchBtcSe
 
     try {
         const response = await fetch(serverRoute, { method, headers, body });
-        const data = await response.json();
 
         if (!response.ok) {
-            const errorMess = data.error || response.statusText;
-            console.error(` BTC ${method}`, serverRoute, 'error', errorMess);
+            const errorMess = response.statusText;
+            console.error(` BTC ${method}`, serverRoute, 'response not ok', errorMess);
             return { error: errorMess, data: null };
         }
 
-        
+        const data = await response.json();
+
         console.log(` BTC ${method}`, serverRoute)//, formattedKeys(data));
 
         const stringData = JSON.stringify(data);
@@ -42,7 +42,7 @@ export default async function fetchBtcServer({ route, method, body }: FetchBtcSe
         return { data: stringData, error: null };
 
     } catch (error) {
-        console.error(` BTC ${method}`, serverRoute, 'throws', error);
+        console.error(` BTC ${method}`, serverRoute, 'throws', (error as Error).message);
         return { error: 'Thrown error: ' + (error as Error).message, data: null };
     }
 }

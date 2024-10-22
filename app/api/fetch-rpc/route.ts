@@ -7,7 +7,12 @@ export async function POST(request: NextRequest) {
     try {
         const { method, params } = await request.json() as FetchRpcArgs;
         const res = await fetchRpc({ method, params });
-        return NextResponse.json(res);
+        if (res.error) {
+            return NextResponse.json({ data: null, error: res.error }, { status: 400 });
+
+        } else {
+            return NextResponse.json(res);
+        }
 
     } catch (error) {
         console.error("Error parsing request body", error);
