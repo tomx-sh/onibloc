@@ -1,4 +1,6 @@
+'use client'
 import * as d3 from "d3";
+import Transaction from "./Transaction";
 
 interface Node {
     topText?: string;
@@ -14,7 +16,7 @@ interface ParentNode extends Node {
     children: (LeafNode | ParentNode)[];
 }
 
-type Data = ParentNode | LeafNode;
+export type BlockData = ParentNode | LeafNode;
 
 const mockArray: LeafNode[] = [
     { topText: "A", centerText: "B", bottomText: "C", value: 10 },
@@ -45,13 +47,13 @@ export default function Block({ data=mockArray }: BlockProps) {
         children: data,
     };
 
-    const children = d3.hierarchy<Data>(_data).sum(d => 'value' in d ? d.value : 0).sort((a, b) => {
+    const children = d3.hierarchy<BlockData>(_data).sum(d => 'value' in d ? d.value : 0).sort((a, b) => {
         if ('value' in b && 'value' in a && b.value !== undefined && a.value !== undefined) {
             return b.value - a.value;
         }
         return 0;
     });
-    const root = d3.treemap<Data>().size([100, 100]).padding(0.2).tile(d3.treemapSquarify.ratio(1))(children)
+    const root = d3.treemap<BlockData>().size([100, 100]).padding(0.2).tile(d3.treemapSquarify.ratio(1))(children)
 
     return (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="var(--accent-8)">
@@ -59,7 +61,7 @@ export default function Block({ data=mockArray }: BlockProps) {
             <rect x="0" y="0" width="100" height="100" rx="0" ry="0"></rect>
 
             {root.leaves().map((leaf, i) => (
-                <rect
+                /*<rect
                     key={i}
                     x={leaf.x0}
                     y={leaf.y0}
@@ -68,7 +70,9 @@ export default function Block({ data=mockArray }: BlockProps) {
                     fill="var(--accent-1)"
                     rx={0}
                     ry={0}
-                />
+                    style={{cursor: 'pointer'}}
+                />*/
+                <Transaction leaf={leaf} key={i}/>
             ))}
 
             {/*root.leaves().map((leaf, i) => (

@@ -1,8 +1,9 @@
 import { Container, Section, Heading, TextField, Flex, Select, Button, Box, Separator } from "@radix-ui/themes"
 import TotalBlocks from "./_components/TotalBlocks"
 import MempoolTransactions from "./_components/MempoolTransactions"
-import Block, { BlockProps } from "./_components/Block"
+import { BlockProps } from "./_components/Block/Block"
 import { getLatestBlockData } from "./lib"
+import Block from "./_components/Block/BlockWithTooltip"
 
 
 export default async function Home() {
