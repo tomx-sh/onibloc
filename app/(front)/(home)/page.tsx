@@ -1,10 +1,14 @@
 import { Container, Section, Heading, TextField, Flex, Select, Button, Box, Separator } from "@radix-ui/themes"
 import TotalBlocks from "./_components/TotalBlocks"
 import MempoolTransactions from "./_components/MempoolTransactions"
-import Block from "./_components/Block"
+import Block, { BlockProps } from "./_components/Block"
+import { getLatestBlockData } from "./lib"
 
 
 export default async function Home() {
+
+    const blockData = await getLatestBlockData()
+    const dataArray = blockData?.map(({ size }) => ({ value: size })) as BlockProps['data']
 
 
     return (
@@ -32,7 +36,7 @@ export default async function Home() {
                             <Box flexGrow='1'><TextField.Root placeholder="Block height"/></Box>
                             <Button>OK</Button>
                         </Flex>
-                        <Block />
+                        <Block data={dataArray}/>
                     </Flex>
                 </Section>
             </Container>

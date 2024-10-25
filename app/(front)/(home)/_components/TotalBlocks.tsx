@@ -8,7 +8,8 @@ import { Box } from "lucide-react"
 const fetcher = async ([method, params]: [string, unknown]) => {
     const { data, error } = await fetchRpc(method, params)
     if (error) throw new Error(error)
-    return data
+    if (!data) throw new Error("No data")
+    return JSON.parse(data)
 }
 
 

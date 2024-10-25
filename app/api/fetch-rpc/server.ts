@@ -29,7 +29,7 @@ export default async function fetchRpc({ method, params }: FetchRpcArgs): Promis
     // rpc methods allways return a stringified object of type RpcResponse
     try {
         const data = JSON.parse(res.data) as RpcResponse;
-        return { data: data.result, error: data.error };
+        return { data: JSON.stringify(data.result), error: data.error };
 
     } catch (error) {
         console.error("Error parsing rpc response", res.data, error);

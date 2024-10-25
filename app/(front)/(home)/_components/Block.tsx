@@ -1,62 +1,62 @@
 import * as d3 from "d3";
 
+interface Node {
+    topText?: string;
+    centerText?: string;
+    bottomText?: string;
+}
 
-interface LeafNode {
-    name: string;
+interface LeafNode extends Node {
     value: number;
 }
 
-interface ParentNode {
-    name: string;
-    children: LeafNode[];
+interface ParentNode extends Node {
+    children: (LeafNode | ParentNode)[];
 }
 
 type Data = ParentNode | LeafNode;
 
-const dataArray = [
-    { name: "A", value: 10 },
-    { name: "B", value: 20 },
-    { name: "C", value: 30 },
-    { name: "D", value: 40 },
-    { name: "E", value: 50 },
-    { name: "F", value: 60 },
-    { name: "G", value: 70 },
-    { name: "H", value: 80 },
-    { name: "I", value: 90 },
-    { name: "J", value: 100 },
-    { name: "K", value: 110 },
-    { name: "L", value: 120 },
-    { name: "M", value: 130 },
-    { name: "N", value: 140 },
-    { name: "O", value: 150 },
-    { name: "P", value: 160 },
-    { name: "Q", value: 170 },
-    { name: "R", value: 180 },
-    { name: "S", value: 190 },
-    { name: "T", value: 200 },
-    { name: "U", value: 210 },
-    { name: "V", value: 220 },
-    { name: "W", value: 230 },
-    { name: "X", value: 240 },
-    { name: "Y", value: 250 },
-    { name: "Z", value: 260 },
+const mockArray: LeafNode[] = [
+    { topText: "A", centerText: "B", bottomText: "C", value: 10 },
+    { topText: "D", centerText: "E", bottomText: "F", value: 20 },
+    { topText: "G", centerText: "H", bottomText: "I", value: 30 },
+    { topText: "J", centerText: "K", bottomText: "L", value: 40 },
+    { topText: "M", centerText: "N", bottomText: "O", value: 50 },
+    { topText: "P", centerText: "Q", bottomText: "R", value: 60 },
+    { topText: "S", centerText: "T", bottomText: "U", value: 70 },
+    { topText: "V", centerText: "W", bottomText: "X", value: 80 },
+    { topText: "Y", centerText: "Z", bottomText: "!", value: 90 },
+    { topText: "1", centerText: "2", bottomText: "3", value: 100 },
+    { topText: "4", centerText: "5", bottomText: "6", value: 110 },
+    { topText: "7", centerText: "8", bottomText: "9", value: 120 },
+    { topText: "0", centerText: "!", bottomText: "!", value: 130 }
 ]
 
-const data: ParentNode = {
-    name: "root",
-    children: dataArray,
-};
+export interface BlockProps {
+    data?: LeafNode[];
+}
 
+export default function Block({ data=mockArray }: BlockProps) {
 
-export default function Block() {
+    const _data: ParentNode = {
+        topText: "Root",
+        centerText: "Node",
+        bottomText: "Tree",
+        children: data,
+    };
 
-    const children = d3.hierarchy<Data>(data).sum(d => 'value' in d ? d.value : 0)
-    const root = d3.treemap<Data>().size([100, 100]).padding(0.5).tile(d3.treemapSquarify.ratio(1))(children)
+    const children = d3.hierarchy<Data>(_data).sum(d => 'value' in d ? d.value : 0).sort((a, b) => {
+        if ('value' in b && 'value' in a && b.value !== undefined && a.value !== undefined) {
+            return b.value - a.value;
+        }
+        return 0;
+    });
+    const root = d3.treemap<Data>().size([100, 100]).padding(0.2).tile(d3.treemapSquarify.ratio(1))(children)
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="var(--accent-6)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="var(--accent-8)">
 
-            <rect x="0" y="0" width="100" height="100" rx="1" ry="1"></rect>
+            <rect x="0" y="0" width="100" height="100" rx="0" ry="0"></rect>
 
             {root.leaves().map((leaf, i) => (
                 <rect
@@ -66,28 +66,28 @@ export default function Block() {
                     width={leaf.x1 - leaf.x0}
                     height={leaf.y1 - leaf.y0}
                     fill="var(--accent-1)"
-                    rx={0.5}
-                    ry={0.5}
+                    rx={0}
+                    ry={0}
                 />
             ))}
 
-            {root.leaves().map((leaf, i) => (
+            {/*root.leaves().map((leaf, i) => (
                 <TransactionInfo
                     key={i}
                     transform={`translate(${leaf.x0}, ${leaf.y0})`}
                     width={leaf.x1 - leaf.x0}
                     height={leaf.y1 - leaf.y0}
-                    topText={leaf.data.name + "azertyuiop"}
-                    centerText={"Hellodezeazfeazfd"}
-                    bottomText="World"
+                    topText={leaf.data.topText}
+                    centerText={leaf.data.centerText}
+                    bottomText={leaf.data.bottomText}
                 />
-            ))}
+            ))*/}
 
         </svg>
     )
 }
 
-
+/** 
 interface TransactionInfoProps extends React.SVGProps<SVGGElement> {
     topText?: string;
     centerText?: string;
@@ -121,7 +121,6 @@ function TransactionInfo({ topText, centerText, bottomText, ...props }: Transact
 
     return (
         <g {...props}>
-            {/* Define a clipPath with the desired width and height */}
             <defs>
                 <clipPath id={clipPathId}>
                     <rect x="0" y="0" width={contentWidth} height={contentHeight} />
@@ -136,3 +135,5 @@ function TransactionInfo({ topText, centerText, bottomText, ...props }: Transact
         </g>
     )
 }
+
+*/
