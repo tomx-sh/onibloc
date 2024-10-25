@@ -54,7 +54,7 @@ export default function Block() {
     const root = d3.treemap<Data>().size([100, 100]).padding(0.5).tile(d3.treemapSquarify.ratio(1))(children)
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="var(--accent-4)">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="var(--accent-6)">
 
             <rect x="0" y="0" width="100" height="100" rx="1" ry="1"></rect>
 
@@ -96,7 +96,7 @@ interface TransactionInfoProps extends React.SVGProps<SVGGElement> {
 
 function TransactionInfo({ topText, centerText, bottomText, ...props }: TransactionInfoProps) {
     const textSizeSmall = 2;
-    const textSizeLarge = 4;
+    const textSizeLarge = 3;
     const margin = 0.8;
     const contentWidth  = props.width  ? parseFloat(props.width.toString())  - 2*margin : 10
     const contentHeight = props.height ? parseFloat(props.height.toString()) - 2*margin : 10
@@ -104,7 +104,7 @@ function TransactionInfo({ topText, centerText, bottomText, ...props }: Transact
 
     // Estimate character width based on font and text size (adjust as needed)
     const estimatedCharWidthSmall = textSizeSmall * 0.6;
-    const estimatedCharWidthLarge = textSizeLarge * 0.6;
+    const estimatedCharWidthLarge = textSizeLarge * 0.7;
     const maxCharsSmall = Math.floor(contentWidth / estimatedCharWidthSmall);
     const maxCharsLarge = Math.floor(contentWidth / estimatedCharWidthLarge);
 
@@ -120,7 +120,7 @@ function TransactionInfo({ topText, centerText, bottomText, ...props }: Transact
     if (contentHeight < textSizeSmall) topText = "";
 
     return (
-        <g {...props} fontFamily="monospace">
+        <g {...props}>
             {/* Define a clipPath with the desired width and height */}
             <defs>
                 <clipPath id={clipPathId}>
@@ -129,9 +129,9 @@ function TransactionInfo({ topText, centerText, bottomText, ...props }: Transact
             </defs>
 
             <g transform={`translate(${margin}, ${margin})`} width={contentWidth} height={contentHeight} clipPath={`url(#${clipPathId})`}>
-                <text x="0" y="0" fontSize={textSizeSmall} fill="var(--accent-6)" dominantBaseline={"hanging"}>{topText}</text>
-                <text x={contentWidth/2} y={contentHeight/2} fontSize={textSizeLarge} fill="var(--accent-9)" dominantBaseline={"middle"} textAnchor={"middle"}>{centerText}</text>
-                <text x={contentWidth} y={contentHeight} fontSize={textSizeSmall} fill="var(--accent-6)" dominantBaseline={"baseline"} textAnchor={"end"}>{bottomText}</text>
+                <text x="0" y="0" fontSize={textSizeSmall} fill="var(--accent-11)" dominantBaseline={"hanging"} fontFamily="monospace">{topText}</text>
+                <text x={contentWidth/2} y={contentHeight/2} fontSize={textSizeLarge} fontWeight={'bold'}  fill="var(--accent-12)" dominantBaseline={"middle"} textAnchor={"middle"}>{centerText}</text>
+                <text x={contentWidth} y={contentHeight} fontSize={textSizeSmall} fill="var(--accent-11)" dominantBaseline={"baseline"} textAnchor={"end"} fontFamily="monospace">{bottomText}</text>
             </g>
         </g>
     )
