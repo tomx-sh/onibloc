@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import { parse } from "path";
+
 
 interface LeafNode {
     name: string;
@@ -77,7 +77,9 @@ export default function Block() {
                     transform={`translate(${leaf.x0}, ${leaf.y0})`}
                     width={leaf.x1 - leaf.x0}
                     height={leaf.y1 - leaf.y0}
-                    hash={leaf.data.name}
+                    topText={leaf.data.name + "azertyuiop"}
+                    centerText={"Hellodezeazfeazfd"}
+                    bottomText="World"
                 />
             ))}
 
@@ -87,20 +89,38 @@ export default function Block() {
 
 
 interface TransactionInfoProps extends React.SVGProps<SVGGElement> {
-    hash?: string;
-    fee?: number;
-    size?: number;
+    topText?: string;
+    centerText?: string;
+    bottomText?: string;
 }
 
-function TransactionInfo({ hash, fee, size, ...props }: TransactionInfoProps) {
-    const textSize = 2;
-    const margin = 0.5;
-    const contentWidth = props.width ? parseFloat(props.width.toString()) - 2*margin : 10
+function TransactionInfo({ topText, centerText, bottomText, ...props }: TransactionInfoProps) {
+    const textSizeSmall = 2;
+    const textSizeLarge = 4;
+    const margin = 0.8;
+    const contentWidth  = props.width  ? parseFloat(props.width.toString())  - 2*margin : 10
     const contentHeight = props.height ? parseFloat(props.height.toString()) - 2*margin : 10
-    const clipPathId = `textClip-${hash}`;
+    const clipPathId = `textClip-${topText}` // Not ideal, but should be unique enough for this example
+
+    // Estimate character width based on font and text size (adjust as needed)
+    const estimatedCharWidthSmall = textSizeSmall * 0.6;
+    const estimatedCharWidthLarge = textSizeLarge * 0.6;
+    const maxCharsSmall = Math.floor(contentWidth / estimatedCharWidthSmall);
+    const maxCharsLarge = Math.floor(contentWidth / estimatedCharWidthLarge);
+
+    // Truncate text if it's too long
+    if (topText && topText.length > maxCharsSmall) topText = topText.slice(0, maxCharsSmall - 1) + "…";
+    if (centerText && centerText.length > maxCharsLarge) centerText = centerText.slice(0, maxCharsLarge - 1) + "…";
+    if (bottomText && bottomText.length > maxCharsSmall) bottomText = bottomText.slice(0, maxCharsSmall - 1) + "…";
+
+    // If height is too small, only show the top text
+    if (contentHeight < textSizeLarge + 2*textSizeSmall) centerText = bottomText = "";
+
+    // If height really is too small, don't show anything
+    if (contentHeight < textSizeSmall) topText = "";
 
     return (
-        <g {...props}>
+        <g {...props} fontFamily="monospace">
             {/* Define a clipPath with the desired width and height */}
             <defs>
                 <clipPath id={clipPathId}>
@@ -109,7 +129,9 @@ function TransactionInfo({ hash, fee, size, ...props }: TransactionInfoProps) {
             </defs>
 
             <g transform={`translate(${margin}, ${margin})`} width={contentWidth} height={contentHeight} clipPath={`url(#${clipPathId})`}>
-                <text x="0" y="0" fontSize={textSize} fill="var(--accent-9)" dominantBaseline={"hanging"}>{"azertyuiop"+hash}</text>
+                <text x="0" y="0" fontSize={textSizeSmall} fill="var(--accent-6)" dominantBaseline={"hanging"}>{topText}</text>
+                <text x={contentWidth/2} y={contentHeight/2} fontSize={textSizeLarge} fill="var(--accent-9)" dominantBaseline={"middle"} textAnchor={"middle"}>{centerText}</text>
+                <text x={contentWidth} y={contentHeight} fontSize={textSizeSmall} fill="var(--accent-6)" dominantBaseline={"baseline"} textAnchor={"end"}>{bottomText}</text>
             </g>
         </g>
     )
