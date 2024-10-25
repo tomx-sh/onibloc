@@ -1,5 +1,5 @@
 'use client'
-import { Code, Flex } from "@radix-ui/themes"
+import { Code, Flex, Text } from "@radix-ui/themes"
 import useSWR from "swr"
 import fetchRpc from "@/app/api/fetch-rpc/client"
 import { ArrowLeftRight} from "lucide-react"
@@ -32,6 +32,9 @@ export default function MempoolTransactions() {
             <Code size='5' color={color()}>
                 {numberOfTransactions}
             </Code>
+            <Text size='2'>
+                transactions in mempool
+            </Text>
         </Flex>
     )
 }

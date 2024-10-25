@@ -1,5 +1,5 @@
 'use client'
-import { Code, Flex } from "@radix-ui/themes"
+import { Code, Flex, Text } from "@radix-ui/themes"
 import useSWR from "swr"
 import fetchRpc from "@/app/api/fetch-rpc/client"
 import { Box } from "lucide-react"
@@ -30,6 +30,9 @@ export default function TotalBlocks() {
             <Code size='5' color={color()}>
                 {blocks}
             </Code>
+            <Text size='2'>
+                blocks
+            </Text>
         </Flex>
     )
 }
